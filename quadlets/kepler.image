@@ -1,0 +1,5 @@
+[Install]
+WantedBy=kepler.service
+
+[Image]
+Image=quay.io/sustainable_computing_io/kepler:latest

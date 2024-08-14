@@ -1,0 +1,25 @@
+FROM registry.redhat.io/rhel9/rhel-bootc:9.4
+
+#install packages
+RUN dnf install -y \
+  bash-completion \
+  bind-utils \
+  firewalld \
+  glibc-langpack-en \
+  glibc-minimal-langpack \
+  man-pages \
+  podman \
+  python3 \
+  setools-console \
+  vim-enhanced && dnf clean all
+
+COPY quadlets/kepler.container /usr/share/containers/systemd/kepler.container
+COPY quadlets/kepler.image /usr/share/containers/systemd/kepler.image
+
+RUN systemctl enable kepler.service
+
+# Copy our custom configuration in /etc/vmware-tools/tools.conf
+# COPY etc/ /etc/
+# RUN dnf -y install open-vm-tools && \
+#     dnf clean all && \
+#     systemctl enable vmtoolsd.service
