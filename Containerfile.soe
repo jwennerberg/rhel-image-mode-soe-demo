@@ -1,6 +1,6 @@
 FROM registry.redhat.io/rhel9/rhel-bootc:9.4
 
-#install packages
+# Install packages
 RUN dnf install -y \
   bash-completion \
   bind-utils \
@@ -8,18 +8,32 @@ RUN dnf install -y \
   glibc-langpack-en \
   glibc-minimal-langpack \
   man-pages \
+  pcp-zeroconf \
   podman \
   python3 \
+  rhc \
+  rhc-worker-playbook \
   setools-console \
-  vim-enhanced && dnf clean all
+  vim-enhanced \
+  && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
-COPY quadlets/kepler.container /usr/share/containers/systemd/kepler.container
-COPY quadlets/kepler.image /usr/share/containers/systemd/kepler.image
+# Red Hat Connect, Insights
+COPY rhc-connect.service /usr/lib/systemd/system/rhc-connect.service
+COPY .rhc_connect_credentials /etc/rhc/.rhc_connect_credentials
+RUN systemctl enable rhc-connect && touch /etc/rhc/.run_rhc_connect_next_boot
 
-RUN systemctl enable kepler.service
+# Kepler power monitoring
+# COPY quadlets/kepler.container /usr/share/containers/systemd/kepler.container
+# COPY quadlets/kepler.image /usr/share/containers/systemd/kepler.image
+# RUN ln -s ../kepler.target /usr/lib/systemd/system/default.target.wants
 
-# Copy our custom configuration in /etc/vmware-tools/tools.conf
-# COPY etc/ /etc/
+# QEMU/KVM, OpenShift Virtualization
+RUN dnf -y install cloud-init qemu-guest-agent && \
+  ln -s ../cloud-init.target /usr/lib/systemd/system/default.target.wants && \
+  rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+
+# Open VM tools
+# COPY etc/vmware-tools/ /etc/vmware-tools/
 # RUN dnf -y install open-vm-tools && \
 #     dnf clean all && \
 #     systemctl enable vmtoolsd.service
