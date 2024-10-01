@@ -1,5 +1,5 @@
 FROM registry.access.redhat.com/ubi9:latest
-
+RUN rm -rf /etc/rhsm-host
 # Install packages
 RUN dnf install -y \
   bash-completion \
@@ -16,6 +16,7 @@ RUN dnf install -y \
   setools-console \
   vim-enhanced \
   && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+RUN ln -s /run/secrets/rhsm /etc/rhsm-host
 
 ## Red Hat Connect, Insights
 #COPY rhc-connect.service /usr/lib/systemd/system/rhc-connect.service
