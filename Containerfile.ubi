@@ -1,0 +1,39 @@
+FROM registry.access.redhat.com/ubi9:latest
+
+# Install packages
+RUN dnf install -y \
+  bash-completion \
+  bind-utils \
+  firewalld \
+  glibc-langpack-en \
+  glibc-minimal-langpack \
+  man-pages \
+  pcp-zeroconf \
+  podman \
+  python3 \
+  rhc \
+  rhc-worker-playbook \
+  setools-console \
+  vim-enhanced \
+  && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+
+## Red Hat Connect, Insights
+#COPY rhc-connect.service /usr/lib/systemd/system/rhc-connect.service
+#COPY .rhc_connect_credentials /etc/rhc/.rhc_connect_credentials
+#RUN systemctl enable rhc-connect && touch /etc/rhc/.run_rhc_connect_next_boot
+#
+## Kepler power monitoring
+## COPY quadlets/kepler.container /usr/share/containers/systemd/kepler.container
+## COPY quadlets/kepler.image /usr/share/containers/systemd/kepler.image
+## RUN ln -s ../kepler.target /usr/lib/systemd/system/default.target.wants
+#
+## QEMU/KVM, OpenShift Virtualization
+#RUN dnf -y install cloud-init qemu-guest-agent && \
+#  ln -s ../cloud-init.target /usr/lib/systemd/system/default.target.wants && \
+#  rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+#
+## Open VM tools
+## COPY etc/vmware-tools/ /etc/vmware-tools/
+## RUN dnf -y install open-vm-tools && \
+##     dnf clean all && \
+##     systemctl enable vmtoolsd.service
