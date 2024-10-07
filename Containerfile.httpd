@@ -1,4 +1,4 @@
-FROM quay.io/jwennerberg/soe-bootc:ng
+FROM quay.io/jwennerberg/soe-bootc:latest
 
 RUN dnf install -y httpd && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
