@@ -1,4 +1,7 @@
 FROM registry.access.redhat.com/ubi9:9.2
+
+COPY etc etc
+
 RUN rm -rf /etc/rhsm-host
 # Install packages
 RUN dnf install -y \
