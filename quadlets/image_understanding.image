@@ -1,0 +1,5 @@
+[Install]
+WantedBy=image_understanding.service
+
+[Image]
+Image=quay.io/jwennerberg/image_understanding:latest
