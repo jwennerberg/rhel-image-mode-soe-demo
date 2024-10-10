@@ -1,9 +1,10 @@
+# Base on latest SOE
 FROM quay.io/jwennerberg/soe-bootc:latest
 
-RUN dnf install -y postgresql \
+# Add extra system dependencies or services
+RUN dnf install -y postgresql-server postgresql \
     && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
-# Image analysis inferencing
-COPY quadlets/image_understanding.container /usr/share/containers/systemd/image_understanding.container
-COPY quadlets/image_understanding.image /usr/share/containers/systemd/image_understanding.image
-RUN ln -s ../image_understanding.target /usr/lib/systemd/system/default.target.wants
+# Add Image analysis app
+COPY quadlets/image_analysis/ /usr/share/containers/systemd/
+RUN ln -s ../image_analysis.target /usr/lib/systemd/system/default.target.wants

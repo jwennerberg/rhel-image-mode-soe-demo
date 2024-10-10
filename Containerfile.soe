@@ -8,7 +8,6 @@ RUN dnf install -y \
   glibc-langpack-en \
   glibc-minimal-langpack \
   man-pages \
-  pcp-zeroconf \
   podman \
   python3 \
   rhc \
@@ -17,8 +16,16 @@ RUN dnf install -y \
   vim-enhanced \
   && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
+# QEMU/KVM, OpenShift Virt
+RUN dnf install -y cloud-init qemu-guest-agent && \
+  ln -s ../cloud-init.target /usr/lib/systemd/system/default.target.wants && \
+  rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+
+COPY etc etc
+COPY usr usr
+
 # Red Hat Connect, Insights
-COPY rhc-connect.service /usr/lib/systemd/system/rhc-connect.service
+#COPY rhc-connect.service /usr/lib/systemd/system/rhc-connect.service
 #COPY .rhc_connect_credentials /etc/rhc/.rhc_connect_credentials
 RUN systemctl enable rhc-connect && touch /etc/rhc/.run_rhc_connect_next_boot
 
@@ -27,13 +34,3 @@ RUN systemctl enable rhc-connect && touch /etc/rhc/.run_rhc_connect_next_boot
 # COPY quadlets/kepler.image /usr/share/containers/systemd/kepler.image
 # RUN ln -s ../kepler.target /usr/lib/systemd/system/default.target.wants
 
-# QEMU/KVM, OpenShift Virtualization
-RUN dnf -y install cloud-init qemu-guest-agent && \
-  ln -s ../cloud-init.target /usr/lib/systemd/system/default.target.wants && \
-  rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
-
-# Open VM tools
-# COPY etc/vmware-tools/ /etc/vmware-tools/
-# RUN dnf -y install open-vm-tools && \
-#     dnf clean all && \
-#     systemctl enable vmtoolsd.service

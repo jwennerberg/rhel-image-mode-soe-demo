@@ -1,6 +1,6 @@
 [Unit]
 Description=Image analysis inferencing
-After=local-fs.target
+After=network-online.target
 
 [Container]
 Image=quay.io/jwennerberg/image_understanding:latest
