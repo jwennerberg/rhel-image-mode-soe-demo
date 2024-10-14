@@ -3,7 +3,7 @@ Description=Image analysis inferencing
 After=network-online.target
 
 [Container]
-Image=quay.io/jwennerberg/image_understanding:latest
+Image=quay.io/jwennerberg/image_understanding:1.0
 PublishPort=8501:8501
 Environment=ENABLE_PROCESS_METRICS=true
 AutoUpdate=registry

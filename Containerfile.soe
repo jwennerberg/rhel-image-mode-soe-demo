@@ -1,5 +1,7 @@
 FROM registry.redhat.io/rhel9/rhel-bootc:9.4
 
+LABEL MAINTAINER="IT Ops"
+
 # Install packages
 RUN dnf install -y \
   bash-completion \
@@ -18,19 +20,13 @@ RUN dnf install -y \
 
 # QEMU/KVM, OpenShift Virt
 RUN dnf install -y cloud-init qemu-guest-agent && \
-  ln -s ../cloud-init.target /usr/lib/systemd/system/default.target.wants && \
-  rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+    systemctl enable cloud-init qemu-guest-agent && \
+    rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
+# Copy config, utils
 COPY etc etc
 COPY usr usr
 
 # Red Hat Connect, Insights
-#COPY rhc-connect.service /usr/lib/systemd/system/rhc-connect.service
-#COPY .rhc_connect_credentials /etc/rhc/.rhc_connect_credentials
-RUN systemctl enable rhc-connect && touch /etc/rhc/.run_rhc_connect_next_boot
-
-# Kepler power monitoring
-# COPY quadlets/kepler.container /usr/share/containers/systemd/kepler.container
-# COPY quadlets/kepler.image /usr/share/containers/systemd/kepler.image
-# RUN ln -s ../kepler.target /usr/lib/systemd/system/default.target.wants
-
+RUN systemctl enable rhc-connect && \
+    touch /etc/rhc/.run_rhc_connect_next_boot
