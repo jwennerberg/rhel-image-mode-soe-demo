@@ -1,40 +1,23 @@
-FROM registry.access.redhat.com/ubi9:latest
-RUN rm -rf /etc/rhsm-host
-# Install packages
-RUN dnf install -y \
-  bash-completion \
-  bind-utils \
-  firewalld \
-  glibc-langpack-en \
-  glibc-minimal-langpack \
-  man-pages \
-  pcp-zeroconf \
-  podman \
-  python3 \
-  rhc \
-  rhc-worker-playbook \
-  setools-console \
-  vim-enhanced \
-  && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
-RUN ln -s /run/secrets/rhsm /etc/rhsm-host
+FROM ubi9-minimal:latest
 
-## Red Hat Connect, Insights
-#COPY rhc-connect.service /usr/lib/systemd/system/rhc-connect.service
-#COPY .rhc_connect_credentials /etc/rhc/.rhc_connect_credentials
-#RUN systemctl enable rhc-connect && touch /etc/rhc/.run_rhc_connect_next_boot
-#
-## Kepler power monitoring
-## COPY quadlets/kepler.container /usr/share/containers/systemd/kepler.container
-## COPY quadlets/kepler.image /usr/share/containers/systemd/kepler.image
-## RUN ln -s ../kepler.target /usr/lib/systemd/system/default.target.wants
-#
-## QEMU/KVM, OpenShift Virtualization
-#RUN dnf -y install cloud-init qemu-guest-agent && \
-#  ln -s ../cloud-init.target /usr/lib/systemd/system/default.target.wants && \
-#  rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
-#
-## Open VM tools
-## COPY etc/vmware-tools/ /etc/vmware-tools/
-## RUN dnf -y install open-vm-tools && \
-##     dnf clean all && \
-##     systemctl enable vmtoolsd.service
+LABEL MAINTAINER="Johan <jwennerb@redhat.com>"
+
+ENV PORT 8080
+
+RUN microdnf install -y httpd && \
+    microdnf clean all
+
+RUN sed -ri -e "/^Listen 80/c\Listen ${PORT}" /etc/httpd/conf/httpd.conf && \
+    chown -R apache:apache /etc/httpd/logs/ && \
+    chown -R apache:apache /run/httpd/
+
+EXPOSE ${PORT}
+
+COPY content/ /var/www/html
+
+RUN chown -R apache:apache /var/www/html
+RUN chmod -R +rx /var/www/html
+
+USER apache
+
+CMD ["httpd", "-D", "FOREGROUND"]
