@@ -1,5 +1,5 @@
 # Base on latest SOE
-FROM quay.io/jwennerberg/soe-bootc:latest
+FROM quay.io/jwennerberg/soe-bootc:base
 
 LABEL MAINTAINER="A-team"
 
