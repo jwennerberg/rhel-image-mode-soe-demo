@@ -1,0 +1,16 @@
+[Unit]
+Description=pgvector container
+After=network-online.target
+
+[Container]
+ContainerName=pgvector
+Image=docker.io/pgvector/pgvector:pg17
+Volume=pgvector:/var/lib/postgresql/data
+Environment=POSTGRES_USER=postgres
+Environment=POSTGRES_PASSWORD=secrete
+Environment=POSTGRES_DB=postgres
+Network=db-network
+PublishPort=5432:5432
+
+[Service]
+Restart=unless-stopped

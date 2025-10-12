@@ -1,0 +1,23 @@
+# Base on latest RHEL 10 SOE
+FROM quay.io/jwennerberg/soe-bootc:10
+
+LABEL MAINTAINER="Team blue"
+
+# Add extra system dependencies or services
+RUN dnf install -y postgresql && \
+    rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+
+# Add pgvector
+COPY quadlets/pgvector/ /usr/share/containers/systemd/
+
+# Add ObjectDetection containerized app
+COPY quadlets/object-detection/ /usr/share/containers/systemd/
+
+# Enable systemd services and configure bootc logical bound images
+RUN ln -s ../objectdetection.target /usr/lib/systemd/system/default.target.wants && \
+    ln -s ../pgvector.target /usr/lib/systemd/system/default.target.wants && \
+    ln -s /usr/share/containers/systemd/pgvector.container /usr/lib/bootc/bound-images.d/pgvector.container && \
+    ln -s /usr/share/containers/systemd/objectdetection.container /usr/lib/bootc/bound-images.d/objectdetection.container
+
+# RHEL Image Mode lint
+#RUN bootc container lint

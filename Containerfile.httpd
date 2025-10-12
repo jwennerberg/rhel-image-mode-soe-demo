@@ -1,6 +1,0 @@
-FROM quay.io/jwennerberg/soe-bootc:latest
-
-RUN yum install -y httpd \
-    && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
-
-RUN echo '<h1 style="text-align:center;">Welcome to image mode for RHEL</h1>' >> /var/www/html/index.html

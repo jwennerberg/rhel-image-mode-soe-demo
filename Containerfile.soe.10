@@ -1,4 +1,5 @@
-FROM registry.redhat.io/rhel9/rhel-bootc:9.5
+FROM registry.stage.redhat.io/rhel10/rhel-bootc:10.1
+#FROM registry.redhat.io/rhel10/rhel-bootc:10.0
 
 LABEL MAINTAINER="IT Ops"
 
@@ -13,15 +14,15 @@ RUN dnf install -y \
   podman \
   python3 \
   rhc \
-  rhc-worker-playbook \
   setools-console \
-  vim-enhanced \
   && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
+#vim-enhanced \
+
 # QEMU/KVM, OpenShift Virtualization
-RUN dnf install -y cloud-init qemu-guest-agent && \
-    systemctl enable cloud-init qemu-guest-agent && \
-    rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+#RUN dnf install -y cloud-init qemu-guest-agent && \
+#    systemctl enable cloud-init qemu-guest-agent && \
+#    rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
 # Copy config, utils
 COPY etc etc
@@ -30,3 +31,5 @@ COPY usr usr
 # Red Hat Connect, Insights
 RUN systemctl enable rhc-connect && \
     touch /etc/rhc/.run_rhc_connect_next_boot
+
+RUN bootc container lint

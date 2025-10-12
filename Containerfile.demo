@@ -1,0 +1,11 @@
+# Base on latest SOE
+FROM quay.io/jwennerberg/soe-bootc:9.5
+
+LABEL MAINTAINER="A-team"
+
+RUN dnf install -y \
+  cockpit \
+  cockpit-composer \
+  cockpit-podman \
+  cockpit-files \
+  && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
