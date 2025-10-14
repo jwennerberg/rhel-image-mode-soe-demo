@@ -1,9 +1,9 @@
 [Unit]
-Description=Image analysis inferencing - 2.0
+Description=Object detection inferencing
 After=network-online.target
 
 [Container]
-Image=quay.io/jwennerberg/image_understanding:2.0
+Image=quay.io/jwennerberg/objectdetection:latest
 PublishPort=8501:8501
 Environment=ENABLE_PROCESS_METRICS=true
 AutoUpdate=registry

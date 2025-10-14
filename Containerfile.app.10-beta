@@ -1,17 +1,17 @@
 # Base on latest RHEL 10 SOE
-FROM satellite.summit.lab.a.wnn.se/rh_lab/rhel-bootc/rhel-soe-bootc:10
+FROM satellite.summit.lab.a.wnn.se/rh_lab/rhel-bootc/rhel-soe-bootc:10-beta
 
-LABEL MAINTAINER="Internal team blue"
+LABEL MAINTAINER="Team blue"
 
 # Add extra system dependencies or services
 RUN dnf install -y postgresql && \
     rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
 # Add pgvector
-COPY quadlets/pgvector/pgvector.container /usr/share/containers/systemd/
+COPY quadlets/pgvector/ /usr/share/containers/systemd/
 
 # Add ObjectDetection containerized app
-COPY quadlets/object-detection/objectdetection.container /usr/share/containers/systemd/
+COPY quadlets/object-detection/ /usr/share/containers/systemd/
 
 # Enable systemd services
 RUN ln -s ../objectdetection.target /usr/lib/systemd/system/default.target.wants && \

@@ -2,6 +2,10 @@
 build-soe-10:
 	@podman build -t quay.io/jwennerberg/soe-bootc:10 -f Containerfile.soe.10
 
+.PHONY: build-soe-10-beta
+build-soe-10-beta:
+	@podman build -t quay.io/jwennerberg/soe-bootc:10-beta -f Containerfile.soe.10-beta
+
 .PHONY: build-soe
 build-soe:
 	@podman build -t quay.io/jwennerberg/soe-bootc:base -f Containerfile.soe
@@ -12,8 +16,7 @@ push-soe:
 
 .PHONY: build-app-bootc-10
 build-app-bootc-10:
-	@podman build -t quay.io/jwennerberg/object-detection-bootc:dev -f Containerfile.app.10
-	@podman tag quay.io/jwennerberg/object-detection-bootc:dev satellite.summit.lab.a.wnn.se/rh_lab/rhel-bootc/objectdetection-bootc:dev
+	@podman build -t satellite.summit.lab.a.wnn.se/rh_lab/rhel-bootc/objectdetection-bootc:dev -f Containerfile.app.10
 
 .PHONY: build-app-bootc
 build-app-bootc:

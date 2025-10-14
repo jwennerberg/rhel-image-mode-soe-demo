@@ -1,12 +1,11 @@
-#FROM registry.stage.redhat.io/rhel10/rhel-bootc:10.1
+FROM registry.stage.redhat.io/rhel10/rhel-bootc:10.1
 #FROM registry.redhat.io/rhel10/rhel-bootc:10.0
-FROM satellite.summit.lab.a.wnn.se/rh_lab/rhel-bootc/rhel10-rhel-bootc:10.0
+#FROM satellite.summit.lab.a.wnn.se/rh_lab/rhel-bootc/rhel10-rhel-bootc:10.0
 
 LABEL MAINTAINER="IT Ops"
 
 # Install packages
 RUN dnf install -y \
-  --enablerepo satellite-client-6-for-rhel-10-aarch64-rpms \
   bash-completion \
   bind-utils \
   firewalld \
@@ -18,8 +17,6 @@ RUN dnf install -y \
   insights-client \
   setools-console \
   vim-enhanced \
-  foreman_ygg_worker \
-  katello-pull-transport-migrate \
   && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
 
