@@ -1,12 +1,14 @@
 [Unit]
 Description=Object detection inferencing
-After=network-online.target
+After=pgvector.service
+Requires=pgvector.service
 
 [Container]
 Image=quay.io/jwennerberg/objectdetection:latest
 PublishPort=8501:8501
 Environment=ENABLE_PROCESS_METRICS=true
 AutoUpdate=registry
+UserNS=auto
 
 [Install]
 WantedBy=multi-user.target default.target

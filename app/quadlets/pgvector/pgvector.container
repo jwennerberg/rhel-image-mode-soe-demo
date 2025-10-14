@@ -6,10 +6,10 @@ After=network-online.target
 ContainerName=pgvector
 Image=docker.io/pgvector/pgvector:pg17
 Volume=pgvector:/var/lib/postgresql/data
-Environment=POSTGRES_USER=postgres
-Environment=POSTGRES_DB=postgres
+EnvironmentFile=/etc/pgvector/db.env
 Network=db-network
 PublishPort=5432:5432
+UserNS=auto
 
 [Install]
 WantedBy=multi-user.target default.target

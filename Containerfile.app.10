@@ -1,11 +1,15 @@
 # Base on latest RHEL 10 SOE
-FROM satellite.summit.lab.a.wnn.se/rh_lab/rhel-bootc/rhel-soe-bootc:10
+#FROM satellite.summit.lab.a.wnn.se/rh_lab/rhel-bootc/rhel-soe-bootc:10
+FROM quay.io/jwennerberg/soe-bootc:10
 
 LABEL MAINTAINER="Internal team blue"
 
 # Add extra system dependencies or services
 RUN dnf install -y postgresql && \
     rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+
+# Copy environment data
+COPY etc etc
 
 # Add pgvector
 COPY quadlets/pgvector/pgvector.container /usr/share/containers/systemd/
