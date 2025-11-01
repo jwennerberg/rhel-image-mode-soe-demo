@@ -7,7 +7,6 @@ ContainerName=pgvector
 Image=docker.io/pgvector/pgvector:pg17
 Volume=pgvector:/var/lib/postgresql/data
 EnvironmentFile=/etc/pgvector/db.env
-Network=db-network
 PublishPort=5432:5432
 UserNS=auto
 

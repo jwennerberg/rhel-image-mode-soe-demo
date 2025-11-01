@@ -3,7 +3,7 @@
 FROM quay.io/jwennerberg/soe-bootc:10
 
 LABEL org.opencontainers.image.authors="Internal team tbd" \
-      org.opencontainers.image.version="10.0-app1.2"
+      org.opencontainers.image.version="10.0-1.1.0"
 
 # Add extra system dependencies or services
 RUN dnf install -y postgresql && \
