@@ -1,0 +1,8 @@
+[[customizations.user]]
+name = "soeadmin"
+password = "password-here"
+key = "ssh-public-key-here"
+groups = ["wheel"]
+
+[[customizations.user]]
+name = "containers"

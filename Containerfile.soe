@@ -1,9 +1,13 @@
-FROM registry.redhat.io/rhel9/rhel-bootc:9.5
+#FROM registry.stage.redhat.io/rhel10/rhel-bootc:10.1
+FROM registry.redhat.io/rhel10/rhel-bootc:10.1
+#FROM satellite.gbg.a.wnn.se/rh/rhel-bootc/rhel-bootc:10.0
 
-LABEL MAINTAINER="IT Ops"
+LABEL org.opencontainers.image.authors="IT DevOps" \
+      org.opencontainers.image.version="10.1-soe-1.0.0"
 
 # Install packages
 RUN dnf install -y \
+  --enablerepo satellite-client-6-for-rhel-10-aarch64-rpms \
   bash-completion \
   bind-utils \
   firewalld \
@@ -12,15 +16,17 @@ RUN dnf install -y \
   man-pages \
   podman \
   python3 \
-  rhc \
-  rhc-worker-playbook \
+  insights-client \
   setools-console \
   vim-enhanced \
+  foreman_ygg_worker \
+  katello-pull-transport-migrate \
   && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
+
 # QEMU/KVM, OpenShift Virtualization
-RUN dnf install -y cloud-init qemu-guest-agent && \
-    systemctl enable cloud-init qemu-guest-agent && \
+RUN dnf install -y qemu-guest-agent && \
+    systemctl enable qemu-guest-agent && \
     rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
 # Copy config, utils
@@ -28,5 +34,7 @@ COPY etc etc
 COPY usr usr
 
 # Red Hat Connect, Insights
-RUN systemctl enable rhc-connect && \
-    touch /etc/rhc/.run_rhc_connect_next_boot
+#RUN systemctl enable rhc-connect && \
+#    touch /etc/rhc/.run_rhc_connect_next_boot
+
+RUN bootc container lint

@@ -1,2 +1,3 @@
 etc/rhc/.rhc_connect_credentials
 etc/ostree/auth.json
+config.toml
